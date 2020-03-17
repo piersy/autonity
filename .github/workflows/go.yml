@@ -139,43 +139,9 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.codecov_upload }}
-          file: coverage*.out
+          file: coverage.out
           yml: codecov.yml
           fail_ci_if_error: true
-
-  tests-tendermint:
-    runs-on: ubuntu-latest
-    env:
-      GO111MODULE: on
-    steps:
-      - name: Set up Go 1.13
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.13
-        id: go
-
-      - name: Set GOPATH
-        # temporary fix
-        # see https://github.com/actions/setup-go/issues/14
-        run: |
-          echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
-          echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
-        shell: bash
-
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
-        with:
-          clean: 'false'
-
-      - name: Cache golang modules
-        uses: actions/cache@v1
-        env:
-          cache-name: cache-golang-modules
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: success_test_e2e
         run: go test -v ./consensus/tendermint/... -timeout 30m -cover -covermode=atomic -test.coverprofile=coverage_tendermint.out
@@ -183,10 +149,11 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.codecov_upload }}
-          file: coverage*.out
+          file: coverage_tendermint.out
           flags: tendermint
           yml: codecov.yml
           fail_ci_if_error: true
+
 
   tendermint_e2e_tests:
     runs-on: ubuntu-latest

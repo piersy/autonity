@@ -39,7 +39,7 @@ type Config struct {
 func DefaultConfig() *Config {
 	return &Config{
 		RequestTimeout: 10000,
-		BlockPeriod:    1,
+		BlockPeriod:    0,
 		ProposerPolicy: RoundRobin,
 		Epoch:          30000,
 	}

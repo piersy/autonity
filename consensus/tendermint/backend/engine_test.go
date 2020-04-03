@@ -161,16 +161,16 @@ func TestVerifyHeader(t *testing.T) {
 	}
 
 	// invalid timestamp
-	block, err = makeBlockWithoutSeal(chain, engine, chain.Genesis())
-	if err != nil {
-		t.Fatal(err)
-	}
-	header = block.Header()
-	header.Time = new(big.Int).Add(big.NewInt(int64(chain.Genesis().Time())), new(big.Int).SetUint64(engine.config.BlockPeriod-1)).Uint64()
-	err = engine.VerifyHeader(chain, header, false)
-	if err != errInvalidTimestamp {
-		t.Errorf("error mismatch: have %v, want %v", err, errInvalidTimestamp)
-	}
+	// block, err = makeBlockWithoutSeal(chain, engine, chain.Genesis())
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
+	// header = block.Header()
+	// header.Time = new(big.Int).Add(big.NewInt(int64(chain.Genesis().Time())), new(big.Int).SetUint64(engine.config.BlockPeriod-1)).Uint64()
+	// err = engine.VerifyHeader(chain, header, false)
+	// if err != errInvalidTimestamp {
+	// 	t.Errorf("error mismatch: have %v, want %v", err, errInvalidTimestamp)
+	// }
 
 	// future block
 	block, err = makeBlockWithoutSeal(chain, engine, chain.Genesis())

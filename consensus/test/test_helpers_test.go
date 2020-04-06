@@ -232,6 +232,7 @@ func sendTransactions(t *testing.T, test *testCase, peers map[string]*testNode, 
 	test.validatorsCanBeStopped = new(int64)
 	wg, ctx := errgroup.WithContext(context.Background())
 
+	fmt.Printf("Before running peers -----------------------------------------------------------\n")
 	for index, peer := range peers {
 		index := index
 		peer := peer
@@ -245,6 +246,8 @@ func sendTransactions(t *testing.T, test *testCase, peers map[string]*testNode, 
 				continue
 			}
 		}
+
+		fmt.Printf("Running peer %s\n", peer.address)
 
 		wg.Go(func() error {
 			return runNode(ctx, peer, test, peers, logger, index, blocksToWait, txs, txsMu, errorOnTx, txPerPeer, names)
@@ -368,7 +371,20 @@ func hookStartNode(nodeIndex string, durationAfterStop float64) hook {
 	}
 }
 
-func runNode(ctx context.Context, peer *testNode, test *testCase, peers map[string]*testNode, logger log.Logger, index string, blocksToWait int, txs map[uint64]int, txsMu sync.Locker, errorOnTx bool, txPerPeer int, names []string) error {
+func runNode(
+	ctx context.Context,
+	peer *testNode,
+	test *testCase,
+	peers map[string]*testNode,
+	logger log.Logger,
+	index string,
+	blocksToWait int,
+	txs map[uint64]int,
+	txsMu sync.Locker,
+	errorOnTx bool,
+	txPerPeer int,
+	names []string,
+) error {
 	var err error
 	testCanBeStopped := new(uint32)
 	fromAddr := crypto.PubkeyToAddress(peer.privateKey.PublicKey)
@@ -396,6 +412,7 @@ wgLoop:
 	for {
 		select {
 		case ev := <-peer.eventChan:
+			fmt.Printf("event block  %s, peer %s\n", ev.Block.Number().String(), peer.address)
 			err = peer.service.APIBackend.IsSelfInWhitelist()
 			if !isExternalUser && err != nil {
 				return fmt.Errorf("a user %q should be in the whitelist: %v on block %d", index, err, ev.Block.NumberU64())

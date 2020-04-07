@@ -3,11 +3,11 @@ package autonity
 import (
 	"errors"
 	"fmt"
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core/state"
-	"github.com/clearmatics/autonity/log"
-	"github.com/clearmatics/autonity/metrics"
-	"github.com/clearmatics/autonity/params"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/state"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/metrics"
+	"github.com/ethereum/go-ethereum/params"
 	"math/big"
 	"sync"
 )

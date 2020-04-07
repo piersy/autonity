@@ -20,7 +20,7 @@ package event
 import (
 	"errors"
 	"fmt"
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/log"
 	"reflect"
 	"sync"
 	"time"

@@ -24,7 +24,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func TestPack(t *testing.T) {

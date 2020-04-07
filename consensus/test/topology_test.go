@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/clearmatics/autonity/common/graph"
+	"github.com/ethereum/go-ethereum/common/graph"
 )
 
 func TestTendermintStarSuccess(t *testing.T) {
@@ -307,7 +307,7 @@ func TestTendermintAddValidatorsToTopologySuccess(t *testing.T) {
 }
 
 func TestTendermintAddParticipantsToTopologySuccess(t *testing.T) {
-	t.Skip("should be fixed by https://github.com/clearmatics/autonity/issues/431")
+	t.Skip("should be fixed by https://github.com/ethereum/go-ethereum/issues/431")
 
 	if testing.Short() {
 		t.Skip("skipping test in short mode")
@@ -357,7 +357,7 @@ func TestTendermintAddParticipantsToTopologySuccess(t *testing.T) {
 }
 
 func TestTendermintAddStakeholdersToTopologySuccess(t *testing.T) {
-	t.Skip("should be fixed by https://github.com/clearmatics/autonity/issues/431")
+	t.Skip("should be fixed by https://github.com/ethereum/go-ethereum/issues/431")
 
 	if testing.Short() {
 		t.Skip("skipping test in short mode")

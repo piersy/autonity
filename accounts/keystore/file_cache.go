@@ -24,7 +24,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/log"
 	mapset "github.com/deckarep/golang-set"
 )
 

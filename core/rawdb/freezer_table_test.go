@@ -25,7 +25,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/clearmatics/autonity/metrics"
+	"github.com/ethereum/go-ethereum/metrics"
 )
 
 func init() {

@@ -22,7 +22,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 // In this example, our client wishes to track the latest 'block number'

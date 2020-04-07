@@ -17,8 +17,8 @@
 package core
 
 import (
-	"github.com/clearmatics/autonity/consensus"
-	"github.com/clearmatics/autonity/core/types"
+	"github.com/ethereum/go-ethereum/consensus"
+	"github.com/ethereum/go-ethereum/core/types"
 )
 
 func (c *core) storeUnminedBlockMsg(unminedBlock *types.Block) {

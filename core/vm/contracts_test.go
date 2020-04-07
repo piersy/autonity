@@ -23,7 +23,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // precompiledTest defines the input/output pairs for precompiled contract tests.

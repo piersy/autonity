@@ -19,8 +19,8 @@ package vm
 import (
 	"math/big"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/common/math"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/math"
 )
 
 // calcMemSize64 calculates the required memory size, and returns

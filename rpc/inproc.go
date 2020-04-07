@@ -20,7 +20,7 @@ import (
 	"context"
 	"net"
 
-	"github.com/clearmatics/autonity/common/ratelimit"
+	"github.com/ethereum/go-ethereum/common/ratelimit"
 )
 
 // DialInProc attaches an in-process connection to the given RPC server.

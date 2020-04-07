@@ -19,10 +19,10 @@ package core
 import (
 	"fmt"
 
-	"github.com/clearmatics/autonity/consensus"
-	"github.com/clearmatics/autonity/core/state"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/params"
+	"github.com/ethereum/go-ethereum/consensus"
+	"github.com/ethereum/go-ethereum/core/state"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/params"
 )
 
 // BlockValidator is responsible for validating block headers, uncles and
@@ -137,6 +137,6 @@ func CalcGasLimit(parent *types.Block, gasFloor, gasCeil uint64) uint64 {
 	}
 
 	return limit
-	// TODO: discuss this parameter at link: https://github.com/clearmatics/autonity-wiki/wiki/Autonity-Chain-Parameter-Highlights
+	// TODO: discuss this parameter at link: https://github.com/ethereum/go-ethereum-wiki/wiki/Autonity-Chain-Parameter-Highlights
 	//When autontiy contract grows in size, it will impact the availability of the upgrade of contract.
 }

@@ -23,10 +23,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/clearmatics/autonity/accounts/scwallet"
-	"github.com/clearmatics/autonity/accounts/usbwallet"
-	"github.com/clearmatics/autonity/log"
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/accounts/scwallet"
+	"github.com/ethereum/go-ethereum/accounts/usbwallet"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/robertkrimen/otto"
 )
 

@@ -25,15 +25,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/common/prque"
-	"github.com/clearmatics/autonity/contracts/autonity"
-	"github.com/clearmatics/autonity/core/state"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/event"
-	"github.com/clearmatics/autonity/log"
-	"github.com/clearmatics/autonity/metrics"
-	"github.com/clearmatics/autonity/params"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/prque"
+	"github.com/ethereum/go-ethereum/contracts/autonity"
+	"github.com/ethereum/go-ethereum/core/state"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/metrics"
+	"github.com/ethereum/go-ethereum/params"
 )
 
 const (
@@ -519,7 +519,7 @@ func (pool *TxPool) local() map[common.Address]types.Transactions {
 // rules and adheres to some heuristic limits of the local node (price and size).
 func (pool *TxPool) validateTx(tx *types.Transaction, local bool) error {
 	// Heuristic limit, reject transactions over 1MB to prevent DOS attacks
-	// changes of parameters were recorded at https://github.com/clearmatics/autonity-wiki/wiki/Autonity-Chain-Parameter-Highlights
+	// changes of parameters were recorded at https://github.com/ethereum/go-ethereum-wiki/wiki/Autonity-Chain-Parameter-Highlights
 	if tx.Size() > 1024*1024 {
 		return ErrOversizedData
 	}

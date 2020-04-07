@@ -21,8 +21,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/clearmatics/autonity/accounts/abi"
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func TestMakeTopics(t *testing.T) {

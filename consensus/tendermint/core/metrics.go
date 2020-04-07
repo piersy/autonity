@@ -17,7 +17,7 @@
 package core
 
 import (
-	"github.com/clearmatics/autonity/metrics"
+	"github.com/ethereum/go-ethereum/metrics"
 )
 
 var (

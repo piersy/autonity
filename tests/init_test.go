@@ -31,7 +31,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/clearmatics/autonity/params"
+	"github.com/ethereum/go-ethereum/params"
 )
 
 // Command line flags to configure the interpreters.

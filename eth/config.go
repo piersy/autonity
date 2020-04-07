@@ -17,7 +17,7 @@
 package eth
 
 import (
-	"github.com/clearmatics/autonity/consensus/tendermint/config"
+	"github.com/ethereum/go-ethereum/consensus/tendermint/config"
 	"math/big"
 	"os"
 	"os/user"
@@ -25,13 +25,13 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/consensus/ethash"
-	"github.com/clearmatics/autonity/core"
-	"github.com/clearmatics/autonity/eth/downloader"
-	"github.com/clearmatics/autonity/eth/gasprice"
-	"github.com/clearmatics/autonity/miner"
-	"github.com/clearmatics/autonity/params"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/consensus/ethash"
+	"github.com/ethereum/go-ethereum/core"
+	"github.com/ethereum/go-ethereum/eth/downloader"
+	"github.com/ethereum/go-ethereum/eth/gasprice"
+	"github.com/ethereum/go-ethereum/miner"
+	"github.com/ethereum/go-ethereum/params"
 )
 
 // DefaultConfig contains default settings for use on the Ethereum main net.

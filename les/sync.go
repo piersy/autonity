@@ -21,11 +21,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core/rawdb"
-	"github.com/clearmatics/autonity/eth/downloader"
-	"github.com/clearmatics/autonity/light"
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/rawdb"
+	"github.com/ethereum/go-ethereum/eth/downloader"
+	"github.com/ethereum/go-ethereum/light"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 var errInvalidCheckpoint = errors.New("invalid advertised checkpoint")

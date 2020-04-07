@@ -7,12 +7,12 @@ import (
 
 	"github.com/golang/mock/gomock"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/consensus"
-	"github.com/clearmatics/autonity/consensus/tendermint/committee"
-	"github.com/clearmatics/autonity/consensus/tendermint/core"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/consensus"
+	"github.com/ethereum/go-ethereum/consensus/tendermint/committee"
+	"github.com/ethereum/go-ethereum/consensus/tendermint/core"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 func TestGetCommittee(t *testing.T) {

@@ -23,8 +23,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/clearmatics/autonity/accounts/abi"
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // decodedCallData is an internal type to represent a method call parsed according

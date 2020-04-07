@@ -22,9 +22,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/common/debug"
-	"github.com/clearmatics/autonity/rlp"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/debug"
+	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/davecgh/go-spew/spew"
 )
 

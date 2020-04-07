@@ -17,10 +17,10 @@
 package core
 
 import (
-	"github.com/clearmatics/autonity/contracts/autonity"
-	"github.com/clearmatics/autonity/core/state"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/core/vm"
+	"github.com/ethereum/go-ethereum/contracts/autonity"
+	"github.com/ethereum/go-ethereum/core/state"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/vm"
 )
 
 // Validator is an interface which defines the standard for block validation. It

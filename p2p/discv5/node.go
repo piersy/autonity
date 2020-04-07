@@ -30,8 +30,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/crypto"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 // Node represents a host on the network.

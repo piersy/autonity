@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 // deployNode creates a new node configuration based on some user input.

@@ -3,17 +3,17 @@ package core
 import (
 	"context"
 	"errors"
-	"github.com/clearmatics/autonity/consensus/tendermint/committee"
-	"github.com/clearmatics/autonity/crypto"
-	"github.com/clearmatics/autonity/crypto/secp256k1"
+	"github.com/ethereum/go-ethereum/consensus/tendermint/committee"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"math/big"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/log"
 	"github.com/golang/mock/gomock"
 )
 

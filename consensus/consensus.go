@@ -19,14 +19,14 @@ package consensus
 
 import (
 	"context"
-	"github.com/clearmatics/autonity/p2p"
+	"github.com/ethereum/go-ethereum/p2p"
 	"math/big"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core/state"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/params"
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/state"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 // ChainReader defines a small collection of methods needed to access the local

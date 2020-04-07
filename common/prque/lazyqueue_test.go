@@ -22,7 +22,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/clearmatics/autonity/common/mclock"
+	"github.com/ethereum/go-ethereum/common/mclock"
 )
 
 const (

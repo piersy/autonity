@@ -26,8 +26,8 @@ import (
 
 	"github.com/docker/docker/pkg/reexec"
 
-	"github.com/clearmatics/autonity/internal/cmdtest"
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/internal/cmdtest"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 func tmpdir(t *testing.T) string {

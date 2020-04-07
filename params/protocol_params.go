@@ -108,7 +108,7 @@ const (
 	// Introduced in Tangerine Whistle (Eip 150)
 	CreateBySelfdestructGas uint64 = 25000
 
-	// changes of parameters were recorded at: https://github.com/clearmatics/autonity-wiki/wiki/Autonity-Chain-Parameter-Highlights
+	// changes of parameters were recorded at: https://github.com/ethereum/go-ethereum-wiki/wiki/Autonity-Chain-Parameter-Highlights
 	MaxCodeSize = 2457600 // Maximum bytecode to permit for a contract
 
 	// Precompiled contract gas prices

@@ -7,16 +7,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/clearmatics/autonity/event"
-	"github.com/clearmatics/autonity/node"
-	"github.com/clearmatics/autonity/p2p/enode"
+	"github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/node"
+	"github.com/ethereum/go-ethereum/p2p/enode"
 
-	"github.com/clearmatics/autonity/accounts"
-	"github.com/clearmatics/autonity/accounts/keystore"
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core"
-	"github.com/clearmatics/autonity/crypto"
-	"github.com/clearmatics/autonity/eth"
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/accounts/keystore"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/eth"
 )
 
 type networkRate struct {

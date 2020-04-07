@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/clearmatics/autonity/common"
-	tendermint "github.com/clearmatics/autonity/consensus/tendermint/config"
-	"github.com/clearmatics/autonity/crypto"
+	"github.com/ethereum/go-ethereum/common"
+	tendermint "github.com/ethereum/go-ethereum/consensus/tendermint/config"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 // Genesis hashes to enforce below configs on.

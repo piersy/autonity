@@ -23,7 +23,7 @@ import (
 
 	mapset "github.com/deckarep/golang-set"
 
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 const MetadataApi = "rpc"

@@ -4,12 +4,12 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"fmt"
-	"github.com/clearmatics/autonity/common/acdefault"
-	"github.com/clearmatics/autonity/common/graph"
-	"github.com/clearmatics/autonity/common/keygenerator"
-	"github.com/clearmatics/autonity/common/math"
-	"github.com/clearmatics/autonity/log"
-	"github.com/clearmatics/autonity/p2p/enode"
+	"github.com/ethereum/go-ethereum/common/acdefault"
+	"github.com/ethereum/go-ethereum/common/graph"
+	"github.com/ethereum/go-ethereum/common/keygenerator"
+	"github.com/ethereum/go-ethereum/common/math"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/p2p/enode"
 	"math/big"
 	"net"
 	"strconv"
@@ -18,13 +18,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/clearmatics/autonity/accounts/abi/bind"
-	"github.com/clearmatics/autonity/ethclient"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/crypto"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 const DefaultTestGasPrice = 100000000000

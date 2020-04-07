@@ -26,7 +26,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/clearmatics/autonity/rlp"
+	"github.com/ethereum/go-ethereum/rlp"
 )
 
 var (

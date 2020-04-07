@@ -18,7 +18,7 @@ package core
 
 import (
 	"context"
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func (c *core) sendPrevote(ctx context.Context, isNil bool) {

@@ -1,6 +1,6 @@
 package acdefault
 
-import "github.com/clearmatics/autonity/common"
+import "github.com/ethereum/go-ethereum/common"
 
 func Deployer() common.Address {
 	return common.HexToAddress("0x1336000000000000000000000000000000000000")

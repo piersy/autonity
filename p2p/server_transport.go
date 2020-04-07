@@ -4,7 +4,7 @@ import (
 	"crypto/ecdsa"
 	"net"
 
-	"github.com/clearmatics/autonity/crypto"
+	"github.com/ethereum/go-ethereum/crypto"
 	"golang.org/x/crypto/sha3"
 )
 

@@ -19,7 +19,7 @@ package tests
 import (
 	"testing"
 
-	"github.com/clearmatics/autonity/core/vm"
+	"github.com/ethereum/go-ethereum/core/vm"
 )
 
 func TestVM(t *testing.T) {

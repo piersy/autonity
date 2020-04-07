@@ -5,8 +5,8 @@
 package committee
 
 import (
-	common "github.com/clearmatics/autonity/common"
-	types "github.com/clearmatics/autonity/core/types"
+	common "github.com/ethereum/go-ethereum/common"
+	types "github.com/ethereum/go-ethereum/core/types"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func BenchmarkCutOriginal(b *testing.B) {

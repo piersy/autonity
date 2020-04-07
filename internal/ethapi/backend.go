@@ -19,21 +19,21 @@ package ethapi
 
 import (
 	"context"
-	"github.com/clearmatics/autonity/contracts/autonity"
+	"github.com/ethereum/go-ethereum/contracts/autonity"
 	"math/big"
 
-	"github.com/clearmatics/autonity/accounts"
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core"
-	"github.com/clearmatics/autonity/core/bloombits"
-	"github.com/clearmatics/autonity/core/state"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/core/vm"
-	"github.com/clearmatics/autonity/eth/downloader"
-	"github.com/clearmatics/autonity/ethdb"
-	"github.com/clearmatics/autonity/event"
-	"github.com/clearmatics/autonity/params"
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core"
+	"github.com/ethereum/go-ethereum/core/bloombits"
+	"github.com/ethereum/go-ethereum/core/state"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/ethereum/go-ethereum/eth/downloader"
+	"github.com/ethereum/go-ethereum/ethdb"
+	"github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 // Backend interface provides the common API services (that are provided by

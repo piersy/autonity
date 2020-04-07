@@ -3,11 +3,11 @@ package committee
 import (
 	"bytes"
 	"fmt"
-	"github.com/clearmatics/autonity/core/types"
+	"github.com/ethereum/go-ethereum/core/types"
 	"reflect"
 	"testing"
 
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/golang/mock/gomock"
 )
 

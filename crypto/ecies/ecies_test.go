@@ -39,7 +39,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/clearmatics/autonity/crypto"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 // Ensure the KDF generates appropriately sized keys.

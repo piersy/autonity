@@ -18,10 +18,10 @@ package committee
 
 import (
 	"errors"
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/consensus"
-	"github.com/clearmatics/autonity/consensus/tendermint/config"
-	"github.com/clearmatics/autonity/core/types"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/consensus"
+	"github.com/ethereum/go-ethereum/consensus/tendermint/config"
+	"github.com/ethereum/go-ethereum/core/types"
 	"math"
 	"reflect"
 	"sort"

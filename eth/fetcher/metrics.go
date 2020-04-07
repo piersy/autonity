@@ -19,7 +19,7 @@
 package fetcher
 
 import (
-	"github.com/clearmatics/autonity/metrics"
+	"github.com/ethereum/go-ethereum/metrics"
 )
 
 var (

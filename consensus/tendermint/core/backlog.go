@@ -17,7 +17,7 @@
 package core
 
 import (
-	"github.com/clearmatics/autonity/core/types"
+	"github.com/ethereum/go-ethereum/core/types"
 	"gopkg.in/karalabe/cookiejar.v2/collections/prque"
 	"math/big"
 )

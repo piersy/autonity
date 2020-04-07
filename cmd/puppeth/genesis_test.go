@@ -24,7 +24,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/clearmatics/autonity/core"
+	"github.com/ethereum/go-ethereum/core"
 	"github.com/davecgh/go-spew/spew"
 )
 

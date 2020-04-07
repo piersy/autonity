@@ -2,8 +2,8 @@ package autonity
 
 import (
 	"fmt"
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/metrics"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/metrics"
 	"math/big"
 	"sync"
 	"testing"

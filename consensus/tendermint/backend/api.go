@@ -17,11 +17,11 @@
 package backend
 
 import (
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/consensus"
-	"github.com/clearmatics/autonity/consensus/tendermint/core"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/consensus"
+	"github.com/ethereum/go-ethereum/consensus/tendermint/core"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 // API is a user facing RPC API to dump BFT state

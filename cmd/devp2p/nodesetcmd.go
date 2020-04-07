@@ -21,10 +21,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/clearmatics/autonity/core/forkid"
-	"github.com/clearmatics/autonity/p2p/enr"
-	"github.com/clearmatics/autonity/params"
-	"github.com/clearmatics/autonity/rlp"
+	"github.com/ethereum/go-ethereum/core/forkid"
+	"github.com/ethereum/go-ethereum/p2p/enr"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/rlp"
 	"gopkg.in/urfave/cli.v1"
 )
 

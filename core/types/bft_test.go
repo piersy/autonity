@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func TestHeaderHash(t *testing.T) {

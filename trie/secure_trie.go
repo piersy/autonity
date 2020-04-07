@@ -19,8 +19,8 @@ package trie
 import (
 	"fmt"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 // SecureTrie wraps a trie with key hashing. In a secure trie, all

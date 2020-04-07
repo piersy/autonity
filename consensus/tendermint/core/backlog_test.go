@@ -9,9 +9,9 @@ import (
 	"github.com/golang/mock/gomock"
 	"gopkg.in/karalabe/cookiejar.v2/collections/prque"
 
-	"github.com/clearmatics/autonity/common"
-	"github.com/clearmatics/autonity/core/types"
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 func TestCheckMessage(t *testing.T) {

@@ -27,10 +27,10 @@ import (
 
 	cli "gopkg.in/urfave/cli.v1"
 
-	"github.com/clearmatics/autonity/cmd/utils"
-	"github.com/clearmatics/autonity/eth"
-	"github.com/clearmatics/autonity/node"
-	"github.com/clearmatics/autonity/params"
+	"github.com/ethereum/go-ethereum/cmd/utils"
+	"github.com/ethereum/go-ethereum/eth"
+	"github.com/ethereum/go-ethereum/node"
+	"github.com/ethereum/go-ethereum/params"
 	"github.com/naoina/toml"
 )
 

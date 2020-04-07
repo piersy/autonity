@@ -19,7 +19,7 @@ package core
 import (
 	"sync"
 
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // "messagesMap" for a lack of better name.

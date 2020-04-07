@@ -22,8 +22,8 @@ import (
 	"io"
 	"sort"
 
-	"github.com/clearmatics/autonity/cmd/utils"
-	"github.com/clearmatics/autonity/internal/debug"
+	"github.com/ethereum/go-ethereum/cmd/utils"
+	"github.com/ethereum/go-ethereum/internal/debug"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

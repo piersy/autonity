@@ -25,7 +25,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 var discard = Protocol{

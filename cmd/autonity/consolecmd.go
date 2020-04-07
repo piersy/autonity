@@ -24,10 +24,10 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/clearmatics/autonity/cmd/utils"
-	"github.com/clearmatics/autonity/console"
-	"github.com/clearmatics/autonity/node"
-	"github.com/clearmatics/autonity/rpc"
+	"github.com/ethereum/go-ethereum/cmd/utils"
+	"github.com/ethereum/go-ethereum/console"
+	"github.com/ethereum/go-ethereum/node"
+	"github.com/ethereum/go-ethereum/rpc"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -43,7 +43,7 @@ var (
 		Description: `
 The Autonity console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
-See https://github.com/clearmatics/autonity/wiki/JavaScript-Console.`,
+See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.`,
 	}
 
 	attachCommand = cli.Command{
@@ -56,7 +56,7 @@ See https://github.com/clearmatics/autonity/wiki/JavaScript-Console.`,
 		Description: `
 The Autonity console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
-See https://github.com/clearmatics/autonity/wiki/JavaScript-Console.
+See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.
 This command allows to open a console on a running autonity node.`,
 	}
 
@@ -69,7 +69,7 @@ This command allows to open a console on a running autonity node.`,
 		Category:  "CONSOLE COMMANDS",
 		Description: `
 The JavaScript VM exposes a node admin interface as well as the Ðapp
-JavaScript API. See https://github.com/clearmatics/autonity/wiki/JavaScript-Console`,
+JavaScript API. See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console`,
 	}
 )
 

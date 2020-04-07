@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/log"
 	"gopkg.in/urfave/cli.v1"
 )
 

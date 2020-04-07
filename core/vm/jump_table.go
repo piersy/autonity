@@ -19,7 +19,7 @@ package vm
 import (
 	"errors"
 
-	"github.com/clearmatics/autonity/params"
+	"github.com/ethereum/go-ethereum/params"
 )
 
 type (

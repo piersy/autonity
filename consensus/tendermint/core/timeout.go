@@ -2,7 +2,7 @@ package core
 
 import (
 	"context"
-	"github.com/clearmatics/autonity/log"
+	"github.com/ethereum/go-ethereum/log"
 	"math/big"
 	"sync"
 	"time"

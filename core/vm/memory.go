@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/clearmatics/autonity/common/math"
+	"github.com/ethereum/go-ethereum/common/math"
 )
 
 // Memory implements a simple memory model for the ethereum virtual machine.

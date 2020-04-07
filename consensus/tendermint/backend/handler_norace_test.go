@@ -5,14 +5,14 @@ package backend
 
 import (
 	"context"
-	"github.com/clearmatics/autonity/consensus"
-	"github.com/clearmatics/autonity/consensus/tendermint/events"
+	"github.com/ethereum/go-ethereum/consensus"
+	"github.com/ethereum/go-ethereum/consensus/tendermint/events"
 	"math/big"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/clearmatics/autonity/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func TestUnhandledMsgs(t *testing.T) {

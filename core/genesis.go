@@ -187,7 +187,11 @@ func SetupGenesisBlockWithOverride(db ethdb.Database, genesis *Genesis, override
 			genesis = DefaultGenesisBlock()
 		}
 		// Ensure the stored genesis matches with the given one.
-		hash := genesis.ToBlock(nil).Hash()
+		b, err := genesis.ToBlock(nil)
+		if err != nil {
+			return nil, common.Hash{}, err
+		}
+		hash := b.Hash()
 		if hash != stored {
 			return genesis.Config, hash, &GenesisMismatchError{stored, hash}
 		}
@@ -200,7 +204,11 @@ func SetupGenesisBlockWithOverride(db ethdb.Database, genesis *Genesis, override
 
 	// Check whether the genesis block is already written.
 	if genesis != nil {
-		hash := genesis.ToBlock(nil).Hash()
+		b, err := genesis.ToBlock(nil)
+		if err != nil {
+			return nil, common.Hash{}, err
+		}
+		hash := b.Hash()
 		if hash != stored {
 			return genesis.Config, hash, &GenesisMismatchError{stored, hash}
 		}
@@ -259,7 +267,17 @@ func (g *Genesis) configOrDefault(ghash common.Hash) *params.ChainConfig {
 
 // ToBlock creates the genesis block and writes state of a genesis specification
 // to the given database (or discards it if nil).
-func (g *Genesis) ToBlock(db ethdb.Database) *types.Block {
+func (g *Genesis) ToBlock(db ethdb.Database) (*types.Block, error) {
+
+	var committee types.Committee
+	if g.Config.AutonityContractConfig != nil {
+		var err error
+		committee, err = extractCommittee(g.Config.AutonityContractConfig.Users)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	if db == nil {
 		db = rawdb.NewMemoryDatabase()
 	}
@@ -296,6 +314,7 @@ func (g *Genesis) ToBlock(db ethdb.Database) *types.Block {
 		Coinbase:   g.Coinbase,
 		Root:       root,
 		Round:      0,
+		Committee:  committee,
 	}
 	if g.GasLimit == 0 {
 		head.GasLimit = params.GenesisGasLimit
@@ -303,7 +322,7 @@ func (g *Genesis) ToBlock(db ethdb.Database) *types.Block {
 	statedb.Commit(false)
 	statedb.Database().TrieDB().Commit(root, true)
 
-	return types.NewBlock(head, nil, nil, nil)
+	return types.NewBlock(head, nil, nil, nil), nil
 }
 
 // Commit writes the block and state of a genesis specification to the database.
@@ -317,7 +336,11 @@ func (g *Genesis) Commit(db ethdb.Database) (*types.Block, error) {
 		return nil, err
 	}
 
-	block := g.ToBlock(db)
+	block, err := g.ToBlock(db)
+	if err != nil {
+		return nil, err
+	}
+
 	if block.Number().Sign() != 0 {
 		return nil, fmt.Errorf("can't commit genesis block with number > 0")
 	}

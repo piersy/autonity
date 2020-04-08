@@ -63,9 +63,6 @@ type Genesis struct {
 	GasUsed    uint64      `json:"gasUsed"`
 	ParentHash common.Hash `json:"parentHash"`
 
-	//PoS Fields
-	Committee types.Committee `json:"committee"           gencodec:"required"`
-
 	mu sync.RWMutex
 }
 
@@ -104,7 +101,6 @@ type genesisSpecMarshaling struct {
 	Difficulty *math.HexOrDecimal256
 	Alloc      map[common.UnprefixedAddress]GenesisAccount
 
-	Committee    []common.UnprefixedAddress
 	VotingPowers []math.HexOrDecimal64
 }
 
@@ -299,7 +295,6 @@ func (g *Genesis) ToBlock(db ethdb.Database) *types.Block {
 		MixDigest:  g.Mixhash,
 		Coinbase:   g.Coinbase,
 		Root:       root,
-		Committee:  g.Committee,
 		Round:      0,
 	}
 	if g.GasLimit == 0 {
@@ -322,17 +317,28 @@ func (g *Genesis) Commit(db ethdb.Database) (*types.Block, error) {
 		return nil, err
 	}
 
-	if g.Config != nil && g.Config.Tendermint != nil {
-		err := g.SetBFT()
-		if err != nil {
-			return nil, err
-		}
-	}
-
 	block := g.ToBlock(db)
 	if block.Number().Sign() != 0 {
 		return nil, fmt.Errorf("can't commit genesis block with number > 0")
 	}
+
+	// Ideally we'd like to do this in ToBlock, but that would require changing
+	// the signature of ToBlock to return an error which would cause a cascade
+	// of changes, so for now I'm sticking with the more minimal option of
+	// setting committee here.
+	if g.Config != nil && g.Config.Tendermint != nil {
+		num := block.Header().Number.Int64()
+		println(num)
+		committee, err := extractCommittee(g.Config.AutonityContractConfig.Users)
+		if err != nil {
+			return nil, err
+		}
+
+		header := block.Header()
+		header.Committee = committee
+		block = types.NewBlock(header, nil, nil, nil)
+	}
+
 	g.mu.RLock()
 	rawdb.WriteTd(db, block.Hash(), block.NumberU64(), g.Difficulty)
 	g.mu.RUnlock()
@@ -357,11 +363,12 @@ func (g *Genesis) Commit(db ethdb.Database) (*types.Block, error) {
 	return block, nil
 }
 
-// SetBFT sets default BFT(IBFT or Tendermint) config values
-func (g *Genesis) SetBFT() error {
-
+// extractCommittee takes a slice of autonity users and extracts the validators
+// into a new type 'types.Committee' which is returned. It returns an error if
+// the provided users contained no validators.
+func extractCommittee(users []params.User) (types.Committee, error) {
 	var committee types.Committee
-	for _, v := range g.Config.AutonityContractConfig.Users {
+	for _, v := range users {
 		if v.Type == params.UserValidator {
 			member := types.CommitteeMember{
 				Address:     v.Address,
@@ -371,21 +378,13 @@ func (g *Genesis) SetBFT() error {
 		}
 	}
 
-	if len(committee) == 0 { // we already have this check before, but just to make sure..
-		return fmt.Errorf("autonity Network requires at least 1 validator")
+	if len(committee) == 0 {
+		return nil, fmt.Errorf("no validators specified in the initial autonity users")
 	}
 
 	sort.Sort(committee)
-	g.Committee = committee
-
 	log.Info("starting BFT consensus", "validators", committee)
-
-	// we have to use '1' to have TD == BlockNumber for xBFT consensus
-	g.mu.Lock()
-	g.Difficulty = big.NewInt(1)
-	g.mu.Unlock()
-
-	return nil
+	return committee, nil
 }
 
 // MustCommit writes the genesis block and state to db, panicking on error.

@@ -345,23 +345,6 @@ func (g *Genesis) Commit(db ethdb.Database) (*types.Block, error) {
 		return nil, fmt.Errorf("can't commit genesis block with number > 0")
 	}
 
-	// Ideally we'd like to do this in ToBlock, but that would require changing
-	// the signature of ToBlock to return an error which would cause a cascade
-	// of changes, so for now I'm sticking with the more minimal option of
-	// setting committee here.
-	if g.Config != nil && g.Config.Tendermint != nil {
-		num := block.Header().Number.Int64()
-		println(num)
-		committee, err := extractCommittee(g.Config.AutonityContractConfig.Users)
-		if err != nil {
-			return nil, err
-		}
-
-		header := block.Header()
-		header.Committee = committee
-		block = types.NewBlock(header, nil, nil, nil)
-	}
-
 	g.mu.RLock()
 	rawdb.WriteTd(db, block.Hash(), block.NumberU64(), g.Difficulty)
 	g.mu.RUnlock()

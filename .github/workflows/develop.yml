@@ -1,5 +1,8 @@
 name: develop
-on: [push]
+on:
+  release:
+    types:
+      - created
 jobs:
   long-run_tests:
     runs-on: ubuntu-latest
@@ -19,6 +22,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           clean: 'false'
+
+      - name: Embed Autonity contract
+        run: make embed-autonity-contract
 
       - name: Test
         run: go test ./consensus/test/... -v -run='${{ matrix.e2e }}' -timeout 40m

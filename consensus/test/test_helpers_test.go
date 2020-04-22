@@ -82,7 +82,8 @@ func makeGenesis(nodes map[string]*testNode, stakeholderName string) *core.Genes
 	genesis.ExtraData = nil
 	genesis.GasLimit = math.MaxUint64 - 1
 	genesis.GasUsed = 0
-	genesis.Difficulty = big.NewInt(1)
+	//genesis.Difficulty = big.NewInt(1)
+	genesis.Difficulty = nil
 	genesis.Timestamp = 0
 	genesis.Nonce = 0
 	genesis.Mixhash = types.BFTDigest

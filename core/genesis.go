@@ -292,15 +292,6 @@ func (g *Genesis) ToBlock(db ethdb.Database) (*types.Block, error) {
 	}
 	root := statedb.IntermediateRoot(false)
 
-	g.mu.RLock()
-	diff := big.NewInt(0)
-	if g.Difficulty == nil {
-		diff.Set(params.GenesisDifficulty)
-	} else {
-		diff.Set(g.Difficulty)
-	}
-	g.mu.RUnlock()
-
 	head := &types.Header{
 		Number:     new(big.Int).SetUint64(g.Number),
 		Nonce:      types.EncodeNonce(g.Nonce),
@@ -309,12 +300,12 @@ func (g *Genesis) ToBlock(db ethdb.Database) (*types.Block, error) {
 		Extra:      g.GetExtraData(),
 		GasLimit:   g.GasLimit,
 		GasUsed:    g.GasUsed,
-		//Difficulty: diff,
-		MixDigest: g.Mixhash,
-		Coinbase:  g.Coinbase,
-		Root:      root,
-		Round:     0,
-		Committee: committee,
+		Difficulty: g.Difficulty,
+		MixDigest:  g.Mixhash,
+		Coinbase:   g.Coinbase,
+		Root:       root,
+		Round:      0,
+		Committee:  committee,
 	}
 	if g.GasLimit == 0 {
 		head.GasLimit = params.GenesisGasLimit

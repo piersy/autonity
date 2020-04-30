@@ -20,9 +20,10 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/clearmatics/autonity/consensus/tendermint/committee"
 	"math/big"
 	"time"
+
+	"github.com/clearmatics/autonity/consensus/tendermint/committee"
 
 	"github.com/clearmatics/autonity/common"
 	"github.com/clearmatics/autonity/common/hexutil"
@@ -69,10 +70,11 @@ var (
 	errInvalidRound = errors.New("invalid round")
 )
 var (
-	defaultDifficulty = big.NewInt(1)
-	nilUncleHash      = types.CalcUncleHash(nil) // Always Keccak256(RLP([])) as uncles are meaningless outside of PoW.
-	emptyNonce        = types.BlockNonce{}
-	now               = time.Now
+	defaultDifficulty = big.NewInt(0)
+	// defaultDifficulty = big.NewInt(1)
+	nilUncleHash = types.CalcUncleHash(nil) // Always Keccak256(RLP([])) as uncles are meaningless outside of PoW.
+	emptyNonce   = types.BlockNonce{}
+	now          = time.Now
 
 	nonceAuthVote = hexutil.MustDecode("0xffffffffffffffff") // Magic nonce number to vote on adding a new validator
 	nonceDropVote = hexutil.MustDecode("0x0000000000000000") // Magic nonce number to vote on removing a validator.

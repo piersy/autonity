@@ -20,10 +20,10 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
 
 	"github.com/clearmatics/autonity/cmd/gengen/gengen"
-	"github.com/clearmatics/autonity/common/math"
 	"github.com/stretchr/testify/require"
 )
 
@@ -38,6 +38,8 @@ func TestCustomGenesis(t *testing.T) {
 	genesis, _, err := gengen.NewGenesis(1, []string{"1e12,v,1,:6789"}, nil)
 	require.NoError(t, err)
 
+	expectedResult := strconv.FormatUint(genesis.GasLimit, 10)
+
 	// Initialize the data directory with the custom genesis block
 	genesisFile, err := os.Create(filepath.Join(datadir, "genesis.json"))
 	require.NoError(t, err)
@@ -45,15 +47,14 @@ func TestCustomGenesis(t *testing.T) {
 	require.NoError(t, err)
 
 	runAutonity(t, "--datadir", datadir, "init", genesisFile.Name()).WaitExit()
-	query := "eth.getBlock(0).nonce"
-	expectedResult, err := math.HexOrDecimal64(genesis.Nonce).MarshalText()
-	require.NoError(t, err)
+	query := "eth.getBlock(0).gasLimit"
 
+	println("expected", string(expectedResult))
 	// Query the custom genesis block
 	autonity := runAutonity(t,
 		"--datadir", datadir, "--maxpeers", "0", "--port", "0",
 		"--nodiscover", "--nat", "none", "--ipcdisable",
 		"--exec", query, "console")
-	autonity.ExpectRegexp(string(expectedResult))
+	autonity.ExpectRegexp(expectedResult)
 	autonity.ExpectExit()
 }

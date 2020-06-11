@@ -19,8 +19,9 @@ package ethapi
 
 import (
 	"context"
-	"github.com/clearmatics/autonity/contracts/autonity"
 	"math/big"
+
+	"github.com/clearmatics/autonity/contracts/autonity"
 
 	"github.com/clearmatics/autonity/accounts"
 	"github.com/clearmatics/autonity/common"
@@ -43,7 +44,6 @@ type Backend interface {
 	AutonityContract() *autonity.Contract
 	Downloader() *downloader.Downloader
 	ProtocolVersion() int
-	SuggestPrice(ctx context.Context) (*big.Int, error)
 	ChainDb() ethdb.Database
 	AccountManager() *accounts.Manager
 	ExtRPCEnabled() bool

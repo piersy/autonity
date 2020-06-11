@@ -22,7 +22,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/clearmatics/autonity"
+	ethereum "github.com/clearmatics/autonity"
 	"github.com/clearmatics/autonity/common"
 	"github.com/clearmatics/autonity/common/hexutil"
 	"github.com/clearmatics/autonity/core/rawdb"
@@ -998,11 +998,6 @@ func (r *Resolver) Logs(ctx context.Context, args struct{ Filter FilterCriteria 
 	// Construct the range filter
 	filter := filters.NewRangeFilter(filters.Backend(r.backend), begin, end, addresses, topics)
 	return runFilter(ctx, r.backend, filter)
-}
-
-func (r *Resolver) GasPrice(ctx context.Context) (hexutil.Big, error) {
-	price, err := r.backend.SuggestPrice(ctx)
-	return hexutil.Big(*price), err
 }
 
 func (r *Resolver) ProtocolVersion(ctx context.Context) (int32, error) {

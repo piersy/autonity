@@ -86,8 +86,6 @@ const schema string = `
         to(block: Long): Account
         # Value is the value, in wei, sent along with this transaction.
         value: BigInt!
-        # GasPrice is the price offered to miners for gas, in wei per unit.
-        gasPrice: BigInt!
         # Gas is the maximum amount of gas this transaction can consume.
         gas: Long!
         # InputData is the data supplied to the target of the transaction.
@@ -304,9 +302,6 @@ const schema string = `
         transaction(hash: Bytes32!): Transaction
         # Logs returns log entries matching the provided filter.
         logs(filter: FilterCriteria!): [Log!]!
-        # GasPrice returns the node's estimate of a gas price sufficient to
-        # ensure a transaction is mined in a timely fashion.
-        gasPrice: BigInt!
         # ProtocolVersion returns the current wire protocol version number.
         protocolVersion: Int!
         # Syncing returns information on the current synchronisation state.

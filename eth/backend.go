@@ -35,6 +35,7 @@ import (
 	"github.com/clearmatics/autonity/common/hexutil"
 	"github.com/clearmatics/autonity/consensus"
 	"github.com/clearmatics/autonity/consensus/ethash"
+	tendermintcore "github.com/clearmatics/autonity/consensus/tendermint/core"
 	"github.com/clearmatics/autonity/core"
 	"github.com/clearmatics/autonity/core/bloombits"
 	"github.com/clearmatics/autonity/core/rawdb"
@@ -210,7 +211,7 @@ func New(ctx *node.ServiceContext, config *Config, cons func(basic consensus.Eng
 	if err != nil {
 		return nil, err
 	}
-	if be, ok := consEngine.(*tendermintBackend.Backend); ok {
+	if be, ok := consEngine.(tendermintcore.Backend); ok {
 		be.SetBlockchain(eth.blockchain)
 	}
 

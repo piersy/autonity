@@ -92,16 +92,7 @@ var (
 		utils.SyncModeFlag,
 		utils.ExitWhenSyncedFlag,
 		utils.GCModeFlag,
-		utils.LightServeFlag,
-		utils.LightLegacyServFlag,
-		utils.LightIngressFlag,
-		utils.LightEgressFlag,
-		utils.LightMaxPeersFlag,
-		utils.LightLegacyPeersFlag,
 		utils.LightKDFFlag,
-		utils.UltraLightServersFlag,
-		utils.UltraLightFractionFlag,
-		utils.UltraLightOnlyAnnounceFlag,
 		utils.WhitelistFlag,
 		utils.CacheFlag,
 		utils.CacheDatabaseFlag,
@@ -324,16 +315,6 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 		utils.Fatalf("Failed to attach to self: %v", err)
 	}
 	ethClient := ethclient.NewClient(rpcClient)
-
-	// Set contract backend for ethereum service if local node
-	// is serving LES requests.
-	if ctx.GlobalInt(utils.LightLegacyServFlag.Name) > 0 || ctx.GlobalInt(utils.LightServeFlag.Name) > 0 {
-		var ethService *eth.Ethereum
-		if err := stack.Service(&ethService); err != nil {
-			utils.Fatalf("Failed to retrieve ethereum service: %v", err)
-		}
-		ethService.SetContractBackend(ethClient)
-	}
 
 	go func() {
 		// Open any wallets already attached

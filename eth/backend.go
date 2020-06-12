@@ -18,15 +18,15 @@
 package eth
 
 import (
-	"errors"
 	"fmt"
-	tendermintBackend "github.com/clearmatics/autonity/consensus/tendermint/backend"
-	"github.com/clearmatics/autonity/crypto"
-	"github.com/clearmatics/autonity/p2p/enode"
 	"math/big"
 	"runtime"
 	"sync"
 	"sync/atomic"
+
+	tendermintBackend "github.com/clearmatics/autonity/consensus/tendermint/backend"
+	"github.com/clearmatics/autonity/crypto"
+	"github.com/clearmatics/autonity/p2p/enode"
 
 	"github.com/clearmatics/autonity/accounts"
 	"github.com/clearmatics/autonity/accounts/abi/bind"
@@ -121,9 +121,6 @@ func (s *Ethereum) SetContractBackend(backend bind.ContractBackend) {
 // initialisation of the common Ethereum object)
 func New(ctx *node.ServiceContext, config *Config, cons func(basic consensus.Engine) consensus.Engine) (*Ethereum, error) {
 	// Ensure configuration values are compatible and sane
-	if config.SyncMode == downloader.LightSync {
-		return nil, errors.New("can't run eth.Ethereum in light sync mode, use les.LightEthereum")
-	}
 	if !config.SyncMode.IsValid() {
 		return nil, fmt.Errorf("invalid sync mode %d", config.SyncMode)
 	}
@@ -548,19 +545,8 @@ func (s *Ethereum) Start(srvr *p2p.Server) error {
 	// Start the RPC service
 	s.netRPCService = ethapi.NewPublicNetAPI(srvr, s.NetVersion())
 
-	// Figure out a max peers count based on the server limits
-	maxPeers := srvr.MaxPeers
-	if s.config.LightServ > 0 {
-		if s.config.LightPeers >= srvr.MaxPeers {
-			return fmt.Errorf("invalid peer config: light peer count (%d) >= total peer count (%d)", s.config.LightPeers, srvr.MaxPeers)
-		}
-		maxPeers -= s.config.LightPeers
-	}
 	// Start the networking layer and the light server if requested
-	s.protocolManager.Start(maxPeers)
-	if s.lesServer != nil {
-		s.lesServer.Start(srvr)
-	}
+	s.protocolManager.Start(srvr.MaxPeers)
 	return nil
 }
 

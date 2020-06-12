@@ -230,17 +230,17 @@ func InspectDatabase(db ethdb.Database) error {
 		logged = time.Now()
 
 		// Key-value store statistics
-		total           common.StorageSize
-		headerSize      common.StorageSize
-		bodySize        common.StorageSize
-		receiptSize     common.StorageSize
-		tdSize          common.StorageSize
-		numHashPairing  common.StorageSize
-		hashNumPairing  common.StorageSize
-		trieSize        common.StorageSize
-		txlookupSize    common.StorageSize
-		preimageSize    common.StorageSize
-		bloomBitsSize   common.StorageSize
+		total          common.StorageSize
+		headerSize     common.StorageSize
+		bodySize       common.StorageSize
+		receiptSize    common.StorageSize
+		tdSize         common.StorageSize
+		numHashPairing common.StorageSize
+		hashNumPairing common.StorageSize
+		trieSize       common.StorageSize
+		txlookupSize   common.StorageSize
+		preimageSize   common.StorageSize
+		bloomBitsSize  common.StorageSize
 
 		// Ancient store statistics
 		ancientHeaders  common.StorageSize
@@ -334,8 +334,6 @@ func InspectDatabase(db ethdb.Database) error {
 		{"Ancient store", "Receipts", ancientReceipts.String()},
 		{"Ancient store", "Difficulties", ancientTds.String()},
 		{"Ancient store", "Block number->hash", ancientHashes.String()},
-		{"Light client", "CHT trie nodes", chtTrieNodes.String()},
-		{"Light client", "Bloom trie nodes", bloomTrieNodes.String()},
 	}
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Database", "Category", "Size"})

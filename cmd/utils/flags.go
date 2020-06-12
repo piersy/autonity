@@ -238,51 +238,6 @@ var (
 		Name:  "override.muirglacier",
 		Usage: "Manually specify Muir Glacier fork-block, overriding the bundled setting",
 	}
-	// Light server and client settings
-	LightLegacyServFlag = cli.IntFlag{ // Deprecated in favor of light.serve, remove in 2021
-		Name:  "lightserv",
-		Usage: "Maximum percentage of time allowed for serving LES requests (deprecated, use --light.serve)",
-		Value: eth.DefaultConfig.LightServ,
-	}
-	LightServeFlag = cli.IntFlag{
-		Name:  "light.serve",
-		Usage: "Maximum percentage of time allowed for serving LES requests (multi-threaded processing allows values over 100)",
-		Value: eth.DefaultConfig.LightServ,
-	}
-	LightIngressFlag = cli.IntFlag{
-		Name:  "light.ingress",
-		Usage: "Incoming bandwidth limit for serving light clients (kilobytes/sec, 0 = unlimited)",
-		Value: eth.DefaultConfig.LightIngress,
-	}
-	LightEgressFlag = cli.IntFlag{
-		Name:  "light.egress",
-		Usage: "Outgoing bandwidth limit for serving light clients (kilobytes/sec, 0 = unlimited)",
-		Value: eth.DefaultConfig.LightEgress,
-	}
-	LightLegacyPeersFlag = cli.IntFlag{ // Deprecated in favor of light.maxpeers, remove in 2021
-		Name:  "lightpeers",
-		Usage: "Maximum number of light clients to serve, or light servers to attach to  (deprecated, use --light.maxpeers)",
-		Value: eth.DefaultConfig.LightPeers,
-	}
-	LightMaxPeersFlag = cli.IntFlag{
-		Name:  "light.maxpeers",
-		Usage: "Maximum number of light clients to serve, or light servers to attach to",
-		Value: eth.DefaultConfig.LightPeers,
-	}
-	UltraLightServersFlag = cli.StringFlag{
-		Name:  "ulc.servers",
-		Usage: "List of trusted ultra-light servers",
-		Value: strings.Join(eth.DefaultConfig.UltraLightServers, ","),
-	}
-	UltraLightFractionFlag = cli.IntFlag{
-		Name:  "ulc.fraction",
-		Usage: "Minimum % of trusted ultra-light servers required to announce a new head",
-		Value: eth.DefaultConfig.UltraLightFraction,
-	}
-	UltraLightOnlyAnnounceFlag = cli.BoolFlag{
-		Name:  "ulc.onlyannounce",
-		Usage: "Ultra light server sends announcements only",
-	}
 	// Ethash settings
 	EthashCacheDirFlag = DirectoryFlag{
 		Name:  "ethash.cachedir",
@@ -962,41 +917,6 @@ func setIPC(ctx *cli.Context, cfg *node.Config) {
 	}
 }
 
-// setLes configures the les server and ultra light client settings from the command line flags.
-func setLes(ctx *cli.Context, cfg *eth.Config) {
-	if ctx.GlobalIsSet(LightLegacyServFlag.Name) {
-		cfg.LightServ = ctx.GlobalInt(LightLegacyServFlag.Name)
-	}
-	if ctx.GlobalIsSet(LightServeFlag.Name) {
-		cfg.LightServ = ctx.GlobalInt(LightServeFlag.Name)
-	}
-	if ctx.GlobalIsSet(LightIngressFlag.Name) {
-		cfg.LightIngress = ctx.GlobalInt(LightIngressFlag.Name)
-	}
-	if ctx.GlobalIsSet(LightEgressFlag.Name) {
-		cfg.LightEgress = ctx.GlobalInt(LightEgressFlag.Name)
-	}
-	if ctx.GlobalIsSet(LightLegacyPeersFlag.Name) {
-		cfg.LightPeers = ctx.GlobalInt(LightLegacyPeersFlag.Name)
-	}
-	if ctx.GlobalIsSet(LightMaxPeersFlag.Name) {
-		cfg.LightPeers = ctx.GlobalInt(LightMaxPeersFlag.Name)
-	}
-	if ctx.GlobalIsSet(UltraLightServersFlag.Name) {
-		cfg.UltraLightServers = strings.Split(ctx.GlobalString(UltraLightServersFlag.Name), ",")
-	}
-	if ctx.GlobalIsSet(UltraLightFractionFlag.Name) {
-		cfg.UltraLightFraction = ctx.GlobalInt(UltraLightFractionFlag.Name)
-	}
-	if cfg.UltraLightFraction <= 0 && cfg.UltraLightFraction > 100 {
-		log.Error("Ultra light fraction is invalid", "had", cfg.UltraLightFraction, "updated", eth.DefaultConfig.UltraLightFraction)
-		cfg.UltraLightFraction = eth.DefaultConfig.UltraLightFraction
-	}
-	if ctx.GlobalIsSet(UltraLightOnlyAnnounceFlag.Name) {
-		cfg.UltraLightOnlyAnnounce = ctx.GlobalBool(UltraLightOnlyAnnounceFlag.Name)
-	}
-}
-
 // makeDatabaseHandles raises out the number of allowed file handles per process
 // for Autonity and returns half of the allowance to assign to the database.
 func makeDatabaseHandles() int {
@@ -1086,57 +1006,19 @@ func SetP2PConfig(ctx *cli.Context, cfg *p2p.Config) {
 	setBootstrapNodes(ctx, cfg)
 	setBootstrapNodesV5(ctx, cfg)
 
-	lightClient := ctx.GlobalString(SyncModeFlag.Name) == "light"
-	lightServer := (ctx.GlobalInt(LightLegacyServFlag.Name) != 0 || ctx.GlobalInt(LightServeFlag.Name) != 0)
-
-	lightPeers := ctx.GlobalInt(LightLegacyPeersFlag.Name)
-	if ctx.GlobalIsSet(LightMaxPeersFlag.Name) {
-		lightPeers = ctx.GlobalInt(LightMaxPeersFlag.Name)
-	}
-	if lightClient && !ctx.GlobalIsSet(LightLegacyPeersFlag.Name) && !ctx.GlobalIsSet(LightMaxPeersFlag.Name) {
-		// dynamic default - for clients we use 1/10th of the default for servers
-		lightPeers /= 10
-	}
-
-	if ctx.GlobalIsSet(MaxPeersFlag.Name) {
-		cfg.MaxPeers = ctx.GlobalInt(MaxPeersFlag.Name)
-		if lightServer && !ctx.GlobalIsSet(LightLegacyPeersFlag.Name) && !ctx.GlobalIsSet(LightMaxPeersFlag.Name) {
-			cfg.MaxPeers += lightPeers
-		}
-	} else {
-		if lightServer {
-			cfg.MaxPeers += lightPeers
-		}
-		if lightClient && (ctx.GlobalIsSet(LightLegacyPeersFlag.Name) || ctx.GlobalIsSet(LightMaxPeersFlag.Name)) && cfg.MaxPeers < lightPeers {
-			cfg.MaxPeers = lightPeers
-		}
-	}
-	if !(lightClient || lightServer) {
-		lightPeers = 0
-	}
-	ethPeers := cfg.MaxPeers - lightPeers
-	if lightClient {
-		ethPeers = 0
-	}
-	log.Info("Maximum peer count", "ETH", ethPeers, "LES", lightPeers, "total", cfg.MaxPeers)
+	cfg.MaxPeers = ctx.GlobalInt(MaxPeersFlag.Name)
+	log.Info("Maximum peer count", cfg.MaxPeers)
 
 	if ctx.GlobalIsSet(MaxPendingPeersFlag.Name) {
 		cfg.MaxPendingPeers = ctx.GlobalInt(MaxPendingPeersFlag.Name)
 	}
-	if ctx.GlobalIsSet(NoDiscoverFlag.Name) || lightClient {
+	if ctx.GlobalIsSet(NoDiscoverFlag.Name) {
 		cfg.NoDiscovery = true
 	}
 
-	// if we're running a light client or server, force enable the v5 peer discovery
-	// unless it is explicitly disabled with --nodiscover note that explicitly specifying
-	// --v5disc overrides --nodiscover, in which case the later only disables v4 discovery
-	forceV5Discovery := (lightClient || lightServer) && !ctx.GlobalBool(NoDiscoverFlag.Name)
 	if ctx.GlobalIsSet(DiscoveryV5Flag.Name) {
 		cfg.DiscoveryV5 = ctx.GlobalBool(DiscoveryV5Flag.Name)
-	} else if forceV5Discovery {
-		cfg.DiscoveryV5 = true
 	}
-
 	if netrestrict := ctx.GlobalString(NetrestrictFlag.Name); netrestrict != "" {
 		list, err := netutil.ParseNetlist(netrestrict)
 		if err != nil {
@@ -1392,7 +1274,6 @@ func CheckExclusive(ctx *cli.Context, args ...interface{}) {
 func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *eth.Config) {
 	// Avoid conflicting network flags
 	CheckExclusive(ctx, DeveloperFlag, TestnetFlag, RinkebyFlag, GoerliFlag)
-	CheckExclusive(ctx, LightLegacyServFlag, LightServeFlag, SyncModeFlag, "light")
 	CheckExclusive(ctx, DeveloperFlag, ExternalSignerFlag) // Can't use both ephemeral unlocked and external signer
 
 	var ks *keystore.KeyStore
@@ -1405,7 +1286,6 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *eth.Config) {
 	setEthash(ctx, cfg)
 	setMiner(ctx, &cfg.Miner)
 	setWhitelist(ctx, cfg)
-	setLes(ctx, cfg)
 
 	if ctx.GlobalIsSet(SyncModeFlag.Name) {
 		cfg.SyncMode = *GlobalTextMarshaler(ctx, SyncModeFlag.Name).(*downloader.SyncMode)

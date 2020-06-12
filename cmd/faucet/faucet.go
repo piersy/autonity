@@ -47,10 +47,8 @@ import (
 	"github.com/clearmatics/autonity/core"
 	"github.com/clearmatics/autonity/core/types"
 	"github.com/clearmatics/autonity/eth"
-	"github.com/clearmatics/autonity/eth/downloader"
 	"github.com/clearmatics/autonity/ethclient"
 	"github.com/clearmatics/autonity/ethstats"
-	"github.com/clearmatics/autonity/les"
 	"github.com/clearmatics/autonity/log"
 	"github.com/clearmatics/autonity/node"
 	"github.com/clearmatics/autonity/p2p"
@@ -235,22 +233,12 @@ func newFaucet(genesis *core.Genesis, port int, enodes []*discv5.Node, network u
 	if err != nil {
 		return nil, err
 	}
-	// Assemble the Ethereum light client protocol
-	if err := stack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
-		cfg := eth.DefaultConfig
-		cfg.SyncMode = downloader.LightSync
-		cfg.NetworkId = network
-		cfg.Genesis = genesis
-		return les.New(ctx, &cfg)
-	}); err != nil {
-		return nil, err
-	}
 	// Assemble the ethstats monitoring and reporting service'
 	if stats != "" {
 		if err := stack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
-			var serv *les.LightEthereum
+			var serv *eth.Ethereum
 			ctx.Service(&serv)
-			return ethstats.New(stats, nil, serv)
+			return ethstats.New(stats, serv)
 		}); err != nil {
 			return nil, err
 		}

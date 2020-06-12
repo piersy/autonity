@@ -117,7 +117,6 @@ type Downloader struct {
 	syncStatsState       stateSyncStats
 	syncStatsLock        sync.RWMutex // Lock protecting the sync stats fields
 
-	lightchain LightChain
 	blockchain BlockChain
 
 	// Callbacks
@@ -210,10 +209,7 @@ type BlockChain interface {
 }
 
 // New creates a new downloader to fetch hashes and blocks from remote peers.
-func New(checkpoint uint64, stateDb ethdb.Database, stateBloom *trie.SyncBloom, mux *event.TypeMux, chain BlockChain, lightchain LightChain, dropPeer peerDropFn) *Downloader {
-	if lightchain == nil {
-		lightchain = chain
-	}
+func New(checkpoint uint64, stateDb ethdb.Database, stateBloom *trie.SyncBloom, mux *event.TypeMux, chain BlockChain, dropPeer peerDropFn) *Downloader {
 	dl := &Downloader{
 		stateDB:        stateDb,
 		stateBloom:     stateBloom,
@@ -224,7 +220,6 @@ func New(checkpoint uint64, stateDb ethdb.Database, stateBloom *trie.SyncBloom, 
 		rttEstimate:    uint64(rttMaxEstimate),
 		rttConfidence:  uint64(1000000),
 		blockchain:     chain,
-		lightchain:     lightchain,
 		dropPeer:       dropPeer,
 		headerCh:       make(chan dataPack, 1),
 		bodyCh:         make(chan dataPack, 1),
@@ -263,10 +258,10 @@ func (d *Downloader) Progress() ethereum.SyncProgress {
 		current = d.blockchain.CurrentBlock().NumberU64()
 	case d.blockchain != nil && d.mode == FastSync:
 		current = d.blockchain.CurrentFastBlock().NumberU64()
-	case d.lightchain != nil:
-		current = d.lightchain.CurrentHeader().Number.Uint64()
+	case d.blockchain != nil:
+		current = d.blockchain.CurrentHeader().Number.Uint64()
 	default:
-		log.Error("Unknown downloader chain/mode combo", "light", d.lightchain != nil, "full", d.blockchain != nil, "mode", d.mode)
+		log.Error("Unknown downloader chain/mode combo", "light", d.blockchain != nil, "full", d.blockchain != nil, "mode", d.mode)
 	}
 	return ethereum.SyncProgress{
 		StartingBlock: d.syncStatsChainOrigin,
@@ -420,7 +415,7 @@ func (d *Downloader) syncWithPeer(p *peerConnection, hash common.Hash, td *big.I
 		if err != nil {
 			d.mux.Post(FailedEvent{err})
 		} else {
-			latest := d.lightchain.CurrentHeader()
+			latest := d.blockchain.CurrentHeader()
 			d.mux.Post(DoneEvent{latest})
 		}
 	}()
@@ -499,10 +494,10 @@ func (d *Downloader) syncWithPeer(p *peerConnection, hash common.Hash, td *big.I
 		// Rewind the ancient store and blockchain if reorg happens.
 		if origin+1 < frozen {
 			var hashes []common.Hash
-			for i := origin + 1; i < d.lightchain.CurrentHeader().Number.Uint64(); i++ {
+			for i := origin + 1; i < d.blockchain.CurrentHeader().Number.Uint64(); i++ {
 				hashes = append(hashes, rawdb.ReadCanonicalHash(d.stateDB, i))
 			}
-			d.lightchain.Rollback(hashes)
+			d.blockchain.Rollback(hashes)
 		}
 	}
 	// Initiate the sync using a concurrent header and content retrieval algorithm
@@ -711,7 +706,7 @@ func (d *Downloader) findAncestor(p *peerConnection, remoteHeader *types.Header)
 	case FastSync:
 		localHeight = d.blockchain.CurrentFastBlock().NumberU64()
 	default:
-		localHeight = d.lightchain.CurrentHeader().Number.Uint64()
+		localHeight = d.blockchain.CurrentHeader().Number.Uint64()
 	}
 	p.log.Debug("Looking for common ancestor", "local", localHeight, "remote", remoteHeight)
 
@@ -725,13 +720,13 @@ func (d *Downloader) findAncestor(p *peerConnection, remoteHeader *types.Header)
 	if d.mode == LightSync {
 		// If we dont know the current CHT position, find it
 		if d.genesis == 0 {
-			header := d.lightchain.CurrentHeader()
+			header := d.blockchain.CurrentHeader()
 			for header != nil {
 				d.genesis = header.Number.Uint64()
 				if floor >= int64(d.genesis)-1 {
 					break
 				}
-				header = d.lightchain.GetHeaderByHash(header.ParentHash)
+				header = d.blockchain.GetHeaderByHash(header.ParentHash)
 			}
 		}
 		// We already know the "genesis" block number, cap floor to that
@@ -794,7 +789,7 @@ func (d *Downloader) findAncestor(p *peerConnection, remoteHeader *types.Header)
 				case FastSync:
 					known = d.blockchain.HasFastBlock(h, n)
 				default:
-					known = d.lightchain.HasHeader(h, n)
+					known = d.blockchain.HasHeader(h, n)
 				}
 				if known {
 					number, hash = n, h
@@ -867,13 +862,13 @@ func (d *Downloader) findAncestor(p *peerConnection, remoteHeader *types.Header)
 				case FastSync:
 					known = d.blockchain.HasFastBlock(h, n)
 				default:
-					known = d.lightchain.HasHeader(h, n)
+					known = d.blockchain.HasHeader(h, n)
 				}
 				if !known {
 					end = check
 					break
 				}
-				header := d.lightchain.GetHeaderByHash(h) // Independent of sync mode, header surely exists
+				header := d.blockchain.GetHeaderByHash(h) // Independent of sync mode, header surely exists
 				if header.Number.Uint64() != check {
 					p.log.Debug("Received non requested header", "number", header.Number, "hash", header.Hash(), "request", check)
 					return 0, errBadPeer
@@ -999,7 +994,7 @@ func (d *Downloader) fetchHeaders(p *peerConnection, from uint64, pivot uint64) 
 					// Retrieve the current head we're at
 					var head uint64
 					if d.mode == LightSync {
-						head = d.lightchain.CurrentHeader().Number.Uint64()
+						head = d.blockchain.CurrentHeader().Number.Uint64()
 					} else {
 						head = d.blockchain.CurrentFastBlock().NumberU64()
 						if full := d.blockchain.CurrentBlock().NumberU64(); head < full {
@@ -1366,19 +1361,19 @@ func (d *Downloader) processHeaders(origin uint64, pivot uint64, td *big.Int) er
 			for i, header := range rollback {
 				hashes[i] = header.Hash()
 			}
-			lastHeader, lastFastBlock, lastBlock := d.lightchain.CurrentHeader().Number, common.Big0, common.Big0
+			lastHeader, lastFastBlock, lastBlock := d.blockchain.CurrentHeader().Number, common.Big0, common.Big0
 			if d.mode != LightSync {
 				lastFastBlock = d.blockchain.CurrentFastBlock().Number()
 				lastBlock = d.blockchain.CurrentBlock().Number()
 			}
-			d.lightchain.Rollback(hashes)
+			d.blockchain.Rollback(hashes)
 			curFastBlock, curBlock := common.Big0, common.Big0
 			if d.mode != LightSync {
 				curFastBlock = d.blockchain.CurrentFastBlock().Number()
 				curBlock = d.blockchain.CurrentBlock().Number()
 			}
 			log.Warn("Rolled back headers", "count", len(hashes),
-				"header", fmt.Sprintf("%d->%d", lastHeader, d.lightchain.CurrentHeader().Number),
+				"header", fmt.Sprintf("%d->%d", lastHeader, d.blockchain.CurrentHeader().Number),
 				"fast", fmt.Sprintf("%d->%d", lastFastBlock, curFastBlock),
 				"block", fmt.Sprintf("%d->%d", lastBlock, curBlock))
 		}
@@ -1428,8 +1423,8 @@ func (d *Downloader) processHeaders(origin uint64, pivot uint64, td *big.Int) er
 				// queued for processing when the header download completes. However, as long as the
 				// peer gave us something useful, we're already happy/progressed (above check).
 				if d.mode == FastSync || d.mode == LightSync {
-					head := d.lightchain.CurrentHeader()
-					if td.Cmp(d.lightchain.GetTd(head.Hash(), head.Number.Uint64())) > 0 {
+					head := d.blockchain.CurrentHeader()
+					if td.Cmp(d.blockchain.GetTd(head.Hash(), head.Number.Uint64())) > 0 {
 						return errStallingPeer
 					}
 				}
@@ -1457,7 +1452,7 @@ func (d *Downloader) processHeaders(origin uint64, pivot uint64, td *big.Int) er
 					// Collect the yet unknown headers to mark them as uncertain
 					unknown := make([]*types.Header, 0, len(chunk))
 					for _, header := range chunk {
-						if !d.lightchain.HasHeader(header.Hash(), header.Number.Uint64()) {
+						if !d.blockchain.HasHeader(header.Hash(), header.Number.Uint64()) {
 							unknown = append(unknown, header)
 						}
 					}
@@ -1466,7 +1461,7 @@ func (d *Downloader) processHeaders(origin uint64, pivot uint64, td *big.Int) er
 					if chunk[len(chunk)-1].Number.Uint64()+uint64(fsHeaderForceVerify) > pivot {
 						frequency = 1
 					}
-					if n, err := d.lightchain.InsertHeaderChain(chunk, frequency); err != nil {
+					if n, err := d.blockchain.InsertHeaderChain(chunk, frequency); err != nil {
 						// If some headers were inserted, add them too to the rollback list
 						if n > 0 {
 							rollback = append(rollback, chunk[:n]...)

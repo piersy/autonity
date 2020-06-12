@@ -233,18 +233,17 @@ func initGenesis(ctx *cli.Context) error {
 	stack := makeFullNode(ctx)
 	defer stack.Close()
 
-	for _, name := range []string{"chaindata", "lightchaindata"} {
-		chaindb, err := stack.OpenDatabase(name, 0, 0, "")
-		if err != nil {
-			utils.Fatalf("Failed to open database: %v", err)
-		}
-		_, hash, err := core.SetupGenesisBlock(chaindb, genesis)
-		if err != nil {
-			utils.Fatalf("Failed to write genesis block: %v", err)
-		}
-		chaindb.Close()
-		log.Info("Successfully wrote genesis state", "database", name, "hash", hash)
+	name := "chaindata"
+	chaindb, err := stack.OpenDatabase(name, 0, 0, "")
+	if err != nil {
+		utils.Fatalf("Failed to open database: %v", err)
 	}
+	_, hash, err := core.SetupGenesisBlock(chaindb, genesis)
+	if err != nil {
+		utils.Fatalf("Failed to write genesis block: %v", err)
+	}
+	chaindb.Close()
+	log.Info("Successfully wrote genesis state", "database", name, "hash", hash)
 	return nil
 }
 
@@ -441,7 +440,7 @@ func copyDb(ctx *cli.Context) error {
 	if syncMode == downloader.FastSync {
 		syncBloom = trie.NewSyncBloom(uint64(ctx.GlobalInt(utils.CacheFlag.Name)/2), chainDb)
 	}
-	dl := downloader.New(0, chainDb, syncBloom, new(event.TypeMux), chain, nil, nil)
+	dl := downloader.New(0, chainDb, syncBloom, new(event.TypeMux), chain, nil)
 
 	// Create a source peer to satisfy downloader requests from
 	db, err := rawdb.NewLevelDBDatabaseWithFreezer(ctx.Args().First(), ctx.GlobalInt(utils.CacheFlag.Name)/2, 256, ctx.Args().Get(1), "")
@@ -500,13 +499,6 @@ func removeDB(ctx *cli.Context) error {
 		confirmAndRemoveDB(path, "full node ancient database")
 	} else {
 		log.Info("Full node ancient database missing", "path", path)
-	}
-	// Remove the light node database
-	path = stack.ResolvePath("lightchaindata")
-	if common.FileExist(path) {
-		confirmAndRemoveDB(path, "light node database")
-	} else {
-		log.Info("Light node database missing", "path", path)
 	}
 	return nil
 }
